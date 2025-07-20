@@ -536,6 +536,7 @@ dependencies = [
 [[package]]
 name = "pure_lang_global"
 version = "0.1.0"
+source = "git+https://github.com/ExPuritate/purelang_global.git#212d456996adb3ae754e9e709b7de335e243821d"
 dependencies = [
  "anyhow",
  "bon",
@@ -560,6 +561,7 @@ dependencies = [
 [[package]]
 name = "pure_lang_proc_macros"
 version = "0.1.0"
+source = "git+https://github.com/ExPuritate/purelang_global.git#212d456996adb3ae754e9e709b7de335e243821d"
 dependencies = [
  "convert_case 0.8.0",
  "proc-macro-crate",

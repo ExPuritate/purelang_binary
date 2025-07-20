@@ -8,7 +8,7 @@ package.version = "0.1.0"
 members = ["crates/proc_macros"]
 
 [workspace.dependencies]
-global = { package = "pure_lang_global", path = "../global" }
+global = { package = "pure_lang_global", git = "https://github.com/ExPuritate/purelang_global.git" }
 num_enum = "0.7.4"
 enumflags2 = { version = "0.7.12", features = ["std"] }
 thiserror = "2.0.12"
