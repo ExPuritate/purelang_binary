@@ -13,13 +13,16 @@ pub struct Assembly {
     type_defs: HashMap<StringName, TypeDef>,
 }
 
+#[allow(unused)]
 const MAGIC: [u8; 2] = *b"PL";
 
+#[allow(unused)]
 #[derive(Debug, Default, Clone, ReadFromFile, WriteToFile)]
 struct Header {
     magic: [u8; 2],
 }
 
+#[allow(unused)]
 impl Header {
     fn check(&self) -> global::Result<()> {
         if self.magic != MAGIC {

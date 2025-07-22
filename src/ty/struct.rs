@@ -8,7 +8,7 @@ use proc_macros::{ReadFromFile, WriteToFile};
 
 #[derive(ctor, Debug, Clone, Getters, CopyGetters, ReadFromFile, WriteToFile)]
 #[getset(get = "pub")]
-pub struct ClassDef {
+pub struct StructDef {
     pub(crate) parent: Option<StringTypeReference>,
     pub(crate) type_vars: IndexMap<StringName, GenericBinding>,
     #[getset(skip)]

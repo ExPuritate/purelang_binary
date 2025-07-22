@@ -43,7 +43,6 @@ impl File {
         buf.extend_from_slice(&(interner_bytes.len() as u64).to_le_bytes());
         buf.extend_from_slice(&self.interner.to_bytes());
         buf.extend_from_slice(self.data.get_ref());
-        let this = Self::new(&buf)?;
         Ok(buf)
     }
 }

@@ -1,4 +1,3 @@
-use crate::Error;
 use crate::core::File;
 use crate::traits::{ReadFromFile, WriteToFile};
 use const_for::const_for;
@@ -7,12 +6,11 @@ use global::attrs::{
     FieldAttr, MethodAttr, TypeAttr, TypeSpecificAttr, TypeSpecificAttrType, Visibility,
 };
 use global::instruction::{StringInstruction, StringInstructionType};
-use global::{IndexMap, StringMethodReference, StringName, StringTypeReference, string_name};
+use global::{IndexMap, StringMethodReference, StringName, StringTypeReference};
 use std::any::Any;
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::hash::Hash;
-use std::io::Seek;
 use std::mem::MaybeUninit;
 
 macro primitive_impl($($t:ty)+) {$(
@@ -302,28 +300,29 @@ impl ReadFromFile for StringInstruction {
                 )+
             }
         }
-        let x = matcher! {
-            LoadTrue => @register_addr
-            LoadFalse => @register_addr
-            Load_u8 => @register_addr | @val
-            Load_u8_0 => @register_addr
-            Load_u8_1 => @register_addr
-            Load_u8_2 => @register_addr
-            Load_u8_3 => @register_addr
-            Load_u8_4 => @register_addr
-            Load_u8_5 => @register_addr
-            Load_u64 => @register_addr | @val
-            NewObject => @ty | @ctor_name | @args | @register_addr
-            InstanceCall => @val | @method | @args | @ret_at
-            StaticCall => @ty | @method | @args | @ret_at
-            LoadArg => @register_addr | @arg
-            LoadAllArgsAsArray => @register_addr
-            LoadStatic => @register_addr | @ty | @name
-            ReturnVal => @register_addr
-            SetField => @register_addr | @field
-        };
-        #[allow(clippy::let_and_return)]
-        x
+        #[allow(deprecated)]
+        {
+            matcher! {
+                LoadTrue => @register_addr
+                LoadFalse => @register_addr
+                Load_u8 => @register_addr | @val
+                Load_u8_0 => @register_addr
+                Load_u8_1 => @register_addr
+                Load_u8_2 => @register_addr
+                Load_u8_3 => @register_addr
+                Load_u8_4 => @register_addr
+                Load_u8_5 => @register_addr
+                Load_u64 => @register_addr | @val
+                NewObject => @ty | @ctor_name | @args | @register_addr
+                InstanceCall => @val | @method | @args | @ret_at
+                StaticCall => @ty | @method | @args | @ret_at
+                LoadArg => @register_addr | @arg
+                LoadAllArgsAsArray => @register_addr
+                LoadStatic => @register_addr | @ty | @name
+                ReturnVal => @register_addr
+                SetField => @register_addr | @field
+            }
+        }
     }
 }
 
@@ -348,7 +347,29 @@ impl WriteToFile for StringInstruction {
             }
         }
         self.to_type().write_to_file(file)?;
-        include!("../matcher");
+        #[allow(deprecated)]
+        {
+            matcher! {
+                LoadTrue => @register_addr
+                LoadFalse => @register_addr
+                Load_u8 => @register_addr | @val
+                Load_u8_0 => @register_addr
+                Load_u8_1 => @register_addr
+                Load_u8_2 => @register_addr
+                Load_u8_3 => @register_addr
+                Load_u8_4 => @register_addr
+                Load_u8_5 => @register_addr
+                Load_u64 => @register_addr | @val
+                NewObject => @ty | @ctor_name | @args | @register_addr
+                InstanceCall => @val | @method | @args | @ret_at
+                StaticCall => @ty | @method | @args | @ret_at
+                LoadArg => @register_addr | @arg
+                LoadAllArgsAsArray => @register_addr
+                LoadStatic => @register_addr | @ty | @name
+                ReturnVal => @register_addr
+                SetField => @register_addr | @field
+            }
+        }
         Ok(())
     }
 }

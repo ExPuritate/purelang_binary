@@ -1,11 +1,13 @@
 use crate::ty::class::ClassDef;
+use crate::ty::r#struct::StructDef;
 use global::getset::Getters;
-use global::{StringName, StringTypeReference, WithType};
+use global::{StringTypeReference, WithType};
 use proc_macros::{ReadFromFile, WriteToFile};
 
 pub mod class;
 pub mod field;
 pub mod method;
+pub mod r#struct;
 
 #[derive(Debug, Clone, WithType, ReadFromFile, WriteToFile)]
 #[with_type(repr = u8)]
@@ -13,7 +15,7 @@ pub mod method;
 #[allow(clippy::large_enum_variant)]
 pub enum TypeDef {
     Class(ClassDef),
-    Struct,
+    Struct(StructDef),
 }
 
 #[derive(Clone, Debug, Getters, ReadFromFile, WriteToFile)]

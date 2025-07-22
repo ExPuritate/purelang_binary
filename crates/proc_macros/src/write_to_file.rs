@@ -1,8 +1,7 @@
 use crate::util::get_crate_name_of;
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::{ToTokens, quote};
-use syn::parse::{Parse, Parser};
-use syn::{Data, DeriveInput, Expr, Meta};
+use syn::{Data, DeriveInput};
 
 pub fn derive_write_to_file_impl(input: DeriveInput) -> syn::Result<TokenStream> {
     let binary_crate = &get_crate_name_of("pure_lang_binary", Span::call_site());
@@ -48,13 +47,6 @@ pub fn derive_write_to_file_impl(input: DeriveInput) -> syn::Result<TokenStream>
                 }
             }) {
                 let repr = repr.require_list()?.parse_args::<syn::Ident>()?;
-                let idents = variants.iter().map(|x| &x.ident);
-                let vars = variants.iter().enumerate().map(|(i, x)| {
-                    x.discriminant
-                        .clone()
-                        .map(|x| x.1)
-                        .unwrap_or(Parser::parse_str(Expr::parse, &format!("{i}")).unwrap())
-                });
                 return Ok(quote! {
                     impl #impl_g #binary_crate::traits::WriteToFile for #name #ty_g #wh {
                         fn write_to_file(
@@ -67,32 +59,7 @@ pub fn derive_write_to_file_impl(input: DeriveInput) -> syn::Result<TokenStream>
                     }
                 });
             }
-            let attrs = input.attrs.iter().filter_map(|x| {
-                if let Some(n) = x.meta.path().get_ident()
-                    && n == "with_type"
-                {
-                    Some(x.meta.clone())
-                } else {
-                    None
-                }
-            });
-            let mut repr = quote!();
-            for meta in attrs {
-                let list = meta.require_list()?;
-                let inner_meta = list.parse_args::<Meta>()?;
-                let name_value = inner_meta.require_name_value()?;
-                let i = name_value.path.require_ident();
-                if i.is_err() {
-                    continue;
-                }
-                let i = i.unwrap();
-                if i == "repr" {
-                    let v = name_value.value.to_token_stream();
-                    repr = quote!(#[repr(#v)]);
-                }
-            }
             let mut ts = TokenStream::new();
-            let type_ident = Ident::new(&format!("{name}Type"), Span::call_site());
             for v in variants {
                 let mut is_unnamed = false;
                 let f_idents = v
