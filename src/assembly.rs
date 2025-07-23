@@ -1,5 +1,6 @@
 use crate::Error;
 use crate::core::File;
+use crate::implement::Implementation;
 use crate::traits::{ReadFromFile, WriteToFile};
 use crate::ty::TypeDef;
 use global::StringName;
@@ -11,6 +12,7 @@ use std::path::Path;
 pub struct Assembly {
     name: StringName,
     type_defs: HashMap<StringName, TypeDef>,
+    implementations: HashMap<StringName, Implementation>,
 }
 
 #[allow(unused)]
@@ -44,6 +46,12 @@ impl Assembly {
     }
     pub fn type_defs_mut(&mut self) -> &mut HashMap<StringName, TypeDef> {
         &mut self.type_defs
+    }
+    pub fn implementations(&self) -> &HashMap<StringName, Implementation> {
+        &self.implementations
+    }
+    pub fn implementations_mut(&mut self) -> &mut HashMap<StringName, Implementation> {
+        &mut self.implementations
     }
 }
 

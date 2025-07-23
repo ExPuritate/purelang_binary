@@ -238,6 +238,9 @@ impl ReadFromFile for TypeSpecificAttr {
         match t {
             TypeSpecificAttrType::Class => Ok(Self::Class(ReadFromFile::read_from_file(file)?)),
             TypeSpecificAttrType::Struct => Ok(Self::Struct(ReadFromFile::read_from_file(file)?)),
+            TypeSpecificAttrType::Interface => {
+                Ok(Self::Interface(ReadFromFile::read_from_file(file)?))
+            }
         }
     }
 }
@@ -248,6 +251,7 @@ impl WriteToFile for TypeSpecificAttr {
         match self {
             TypeSpecificAttr::Class(flags) => flags.write_to_file(file),
             TypeSpecificAttr::Struct(flags) => flags.write_to_file(file),
+            TypeSpecificAttr::Interface(flags) => flags.write_to_file(file),
         }
     }
 }
